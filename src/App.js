@@ -11,8 +11,8 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/categorie/:folderId" element={<Category />} />
+            <Route path="/naby-allah" element={<Home />} />
+            <Route path="/naby-allah/categorie/:folderId" element={<Category />} />
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
