@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/naby-allah/static/css/main.e6c13ad2.css",
-    "main.js": "/naby-allah/static/js/main.eb2b6507.js",
+    "main.js": "/naby-allah/static/js/main.84afa70b.js",
     "static/js/453.bf607b24.chunk.js": "/naby-allah/static/js/453.bf607b24.chunk.js",
     "index.html": "/naby-allah/index.html",
     "main.e6c13ad2.css.map": "/naby-allah/static/css/main.e6c13ad2.css.map",
-    "main.eb2b6507.js.map": "/naby-allah/static/js/main.eb2b6507.js.map",
+    "main.84afa70b.js.map": "/naby-allah/static/js/main.84afa70b.js.map",
     "453.bf607b24.chunk.js.map": "/naby-allah/static/js/453.bf607b24.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.eb2b6507.js"
+    "static/js/main.84afa70b.js"
   ]
 }
