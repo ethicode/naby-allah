@@ -24,6 +24,7 @@ const GoogleDriveFolderList = ({ setAudio }) => {
         const data = await response.json();
         if (data.files) {
           setFiles(data.files);
+          console.log(data.files);
         } else {
           setError('Aucun fichier trouvé.');
         }

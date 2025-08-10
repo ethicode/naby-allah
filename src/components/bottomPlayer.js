@@ -123,7 +123,7 @@ export default function BottomPlayer({ audio, setAudio }) {
                     }}
                 >
                     {/* Stop */}
-                    <IconButton
+                    {/* <IconButton
                         color={isLooping ? 'secondary' : 'primary'}
                         onClick={toggleLoop}
                         disabled={!audio}
@@ -134,13 +134,29 @@ export default function BottomPlayer({ audio, setAudio }) {
                     >
                         {isLooping ? <Loop /> : <Loop />}
 
-                    </IconButton>
-                    <IconButton
+                    </IconButton> */}
+                    <Fab
+                        onClick={toggleLoop}
+                        disabled={!audio}
+                        color={isLooping ? 'secondary' : ''}
+                        sx={{
+                            width: 40,
+                            height: 40
+                        }}
+                    >
+                        {isLooping ? <Loop /> : <Loop />}
+                    </Fab>
+                     <Fab
                         onClick={handleStop}
                         disabled={!audio}
+                        // color={isPlaying ? 'secondary' : 'primary'}
+                        sx={{
+                            width: 40,
+                            height: 40
+                        }}
                     >
                         <StopIcon />
-                    </IconButton>
+                    </Fab>
 
                     {/* Play/Pause */}
                     <Fab
@@ -148,8 +164,8 @@ export default function BottomPlayer({ audio, setAudio }) {
                         disabled={!audio}
                         color={isPlaying ? 'secondary' : 'primary'}
                         sx={{
-                            width: 56,
-                            height: 56
+                            width: 40,
+                            height: 40
                         }}
                     >
                         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}

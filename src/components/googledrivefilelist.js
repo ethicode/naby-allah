@@ -38,35 +38,32 @@ const GoogleDriveFileList = () => {
         fetchFiles();
     }, []);
 
-    const handlePlayAudio = async (fileId) => {
-        try {
-            // Si un audio est déjà en cours, on l'arrête
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-
-            const fileUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
-            const response = await fetch(fileUrl);
-            if (!response.ok) throw new Error("Impossible de récupérer l'audio");
-
-            const blob = await response.blob();
-            const audioUrl = URL.createObjectURL(blob);
-
-            const newAudio = new Audio(audioUrl);
-            newAudio.loop = true; // 🔁 lecture en boucle
-            setAudio(newAudio);
-
-            await newAudio.play();
-        } catch (err) {
-            setError(err.message);
+    const handlePlayAudio = (fileId) => {
+    try {
+        // Arrêter l'audio précédent
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
         }
-    };
+
+        // Lien direct de streaming Google Drive
+        const fileUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+
+        // Créer un objet Audio qui lit directement depuis l'URL
+        const newAudio = new Audio(fileUrl);
+        newAudio.loop = true; // 🔁
+        newAudio.play();
+
+        setAudio(newAudio);
+    } catch (err) {
+        setError(err.message);
+    }
+};
+
 
 
     return (
         <div>
-            <h1>Liste des fichiers du dossier </h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <List sx={{ width: '100%', maxWidth: 360}}>
                 {files.map((file) => (
