@@ -1,0 +1,48 @@
+.App {
+  text-align: center;
+  margin: 20px;
+}
+
+.App-header {
+  background-color: #282c34;
+  color: white;
+  padding: 20px;
+}
+
+.file-list {
+  margin-top: 20px;
+}
+
+.file-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.file-list li {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f0f0f0;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.file-list li:hover {
+  background-color: #d0d0d0;
+}
+
+.audio-player {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #61dafb;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #21a1f1;
+}
