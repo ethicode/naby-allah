@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BottomNavigation, BottomNavigationAction, Box, Fab, IconButton, Paper } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, Fab, IconButton, Paper, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
-import { VolumeMute } from '@mui/icons-material';
+import { Loop, LoopTwoTone, VolumeMute } from '@mui/icons-material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -99,6 +99,15 @@ export default function BottomPlayer({ audio, setAudio }) {
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     };
 
+    const [isLooping, setIsLooping] = useState(false);
+
+    const toggleLoop = () => {
+        if (audio) {
+            audio.loop = !audio.loop;
+            setIsLooping(audio.loop);
+        }
+    };
+
 
     return (
         <>
@@ -115,12 +124,20 @@ export default function BottomPlayer({ audio, setAudio }) {
                 >
                     {/* Stop */}
                     <IconButton
-                        onClick={handleStop}
+                        color={isLooping ? 'secondary' : 'primary'}
+                        onClick={toggleLoop}
                         disabled={!audio}
                         sx={{
                             bgcolor: '#f5f5f5',
                             '&:hover': { bgcolor: '#e0e0e0' }
                         }}
+                    >
+                        {isLooping ? <Loop /> : <Loop />}
+
+                    </IconButton>
+                    <IconButton
+                        onClick={handleStop}
+                        disabled={!audio}
                     >
                         <StopIcon />
                     </IconButton>
@@ -141,26 +158,23 @@ export default function BottomPlayer({ audio, setAudio }) {
                     {/* Volume */}
                     <IconButton
                         onClick={handleMuteToggle}
-                        sx={{
-                            bgcolor: '#f5f5f5',
-                            '&:hover': { bgcolor: '#e0e0e0' }
-                        }}
                     >
                         {isMuted ? <VolumeMute /> : volume === 0 ? <VolumeDown /> : <VolumeUp />}
                     </IconButton>
                 </Box>
 
-                <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
-                    {formatTime(currentTime)}
-                    <IconButton onClick={handleMuteToggle}>
-                        {isMuted ? <VolumeMute /> : volume === 0 ? <VolumeDown /> : <VolumeUp />}
-                    </IconButton>
+                <Stack spacing={2} direction="row" sx={{ paddingX: 2, alignItems: 'center', mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                        {formatTime(currentTime)}
+                    </Typography>
                     <Slider
                         aria-label="Progression"
                         value={(currentTime / duration) * 100}
                         onChange={handleChange}
                     />
-                    {formatTime(duration)}
+                    <Typography variant="body2" color="text.secondary">
+                        {formatTime(duration)}
+                    </Typography>
                 </Stack>
             </Paper>
         </>

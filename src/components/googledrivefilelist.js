@@ -54,9 +54,10 @@ const GoogleDriveFileList = () => {
             const audioUrl = URL.createObjectURL(blob);
 
             const newAudio = new Audio(audioUrl);
+            newAudio.loop = true; // 🔁 lecture en boucle
             setAudio(newAudio);
 
-            await newAudio.play(); // ⬅️ On lance la lecture ici
+            await newAudio.play();
         } catch (err) {
             setError(err.message);
         }
@@ -67,18 +68,16 @@ const GoogleDriveFileList = () => {
         <div>
             <h1>Liste des fichiers du dossier </h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <List>
+            <List sx={{ width: '100%', maxWidth: 360}}>
                 {files.map((file) => (
-                    <ListItem key={file.id}>
-                        <ListItemButton primary={file.name} >
-                            <ListItemText primary={file.name} />
-                            {file.mimeType && file.mimeType.includes("audio") && (
-                                <IconButton onClick={() => handlePlayAudio(file.id)}>
-                                    <PlayArrowIcon />
-                                </IconButton>
-                            )}
-                        </ListItemButton>
-                    </ListItem>
+                    <ListItemButton key={file.id} color="primary" primary={file.name} onClick={() => handlePlayAudio(file.id)}>
+                        <ListItemText primary={file.name} />
+                        {file.mimeType && file.mimeType.includes("audio") && (
+                            <IconButton>
+                                <PlayArrowIcon />
+                            </IconButton>
+                        )}
+                    </ListItemButton>
                 ))}
             </List>
             <BottomPlayer audio={audio} setAudio={setAudio} />

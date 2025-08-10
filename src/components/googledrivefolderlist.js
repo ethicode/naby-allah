@@ -46,29 +46,15 @@ const GoogleDriveFolderList = ({ setAudio }) => {
 
   return (
     <div>
-      <h1>Liste des fichiers du dossier Google Drive</h1>
-      <MediaControlCard />
+      {/* <MediaControlCard /> */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         {files.map((file) => (
           <Grid size={{ xs: 6, md: 4, lg: 2 }} item key={file.id}>
             <MediaCard name={file.name} id={file.id} />
           </Grid>
         ))}
       </Grid>
-
-      <List>
-        {files.map((file) => (
-          <ListItem key={file.id}>
-            <ListItemText primary={file.name} />
-            {file.mimeType && file.mimeType.includes("audio") && (
-              <IconButton onClick={() => handlePlayAudio(file.id)}>
-                <PlayArrowIcon />
-              </IconButton>
-            )}
-          </ListItem>
-        ))}
-      </List>
 
     </div>
   );

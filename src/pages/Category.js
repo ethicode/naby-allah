@@ -6,7 +6,7 @@ function Category({ files, onSelect }) {
   
 
   return (
-    <div className="file-list">
+    <div >
       <GoogleDriveFileList />
     </div>
   );

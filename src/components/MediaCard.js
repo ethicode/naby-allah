@@ -6,29 +6,23 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import { FolderOpen } from '@mui/icons-material';
 
 export default function MediaCard({ name, id }) {
     return (
-        <Link to={`/categorie/${id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/naby-allah/categorie/${id}`} style={{ textDecoration: 'none' }}>
             <Card sx={{ maxWidth: 345, height: '100%',  }}>
                 {/* <CardMedia
                     sx={{ height: 140 }}
                     image="/static/images/cards/contemplative-reptile.jpg"
                     title="green iguana"
                 /> */}
+                <FolderOpen sx={{width:'100%', color: 'primary.main'}} />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {name}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
-                    </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
             </Card>
         </Link>
     );
