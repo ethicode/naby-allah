@@ -10,7 +10,7 @@ import { FolderOpen } from '@mui/icons-material';
 
 export default function MediaCard({ name, id }) {
     return (
-        <Link to={`/naby-allah/categorie/${id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/naby-allah/categorie/${id}`} state={{ folderName: name }} style={{ textDecoration: 'none' }}>
             <Card sx={{ maxWidth: 345, height: '100%',  }}>
                 {/* <CardMedia
                     sx={{ height: 140 }}

@@ -138,15 +138,16 @@ export default function BottomPlayer({ audio, setAudio }) {
                     <Fab
                         onClick={toggleLoop}
                         disabled={!audio}
-                        color={isLooping ? 'secondary' : ''}
                         sx={{
+                            backgroundColor: isLooping ? 'teal' : '',
+                            color: isLooping? 'white': 'black' ,
                             width: 40,
                             height: 40
                         }}
                     >
                         {isLooping ? <Loop /> : <Loop />}
                     </Fab>
-                     <Fab
+                    <Fab
                         onClick={handleStop}
                         disabled={!audio}
                         // color={isPlaying ? 'secondary' : 'primary'}
@@ -162,8 +163,10 @@ export default function BottomPlayer({ audio, setAudio }) {
                     <Fab
                         onClick={isPlaying ? handlePause : handlePlay}
                         disabled={!audio}
-                        color={isPlaying ? 'secondary' : 'primary'}
+                        // color={isPlaying ? 'secondary' : 'primary'}
                         sx={{
+                            backgroundColor: isPlaying ? 'teal' : '',
+                            color: isPlaying? 'white': 'black' ,
                             width: 40,
                             height: 40
                         }}
@@ -172,11 +175,6 @@ export default function BottomPlayer({ audio, setAudio }) {
                     </Fab>
 
                     {/* Volume */}
-                    <IconButton
-                        onClick={handleMuteToggle}
-                    >
-                        {isMuted ? <VolumeMute /> : volume === 0 ? <VolumeDown /> : <VolumeUp />}
-                    </IconButton>
                 </Box>
 
                 <Stack spacing={2} direction="row" sx={{ paddingX: 2, alignItems: 'center', mb: 1 }}>
