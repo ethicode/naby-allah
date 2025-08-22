@@ -73,7 +73,7 @@ const GoogleDriveFileList = () => {
                             backgroundColor: playingId === file.id ? 'teal' : 'transparent',
                             color: playingId === file.id ? 'white' : 'inherit',
                             '&:hover': {
-                                backgroundColor: playingId === file.id ? 'primary.dark' : 'action.hover',
+                                backgroundColor: playingId === file.id ? 'teal' : 'action.hover',
                             },
                         }}
                     >
