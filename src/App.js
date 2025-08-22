@@ -19,8 +19,8 @@ function App() {
         <Header />
         <Routes sx={{ background: 'red' }}>
           <Route path="/" element={<Home />} />
-          <Route path="/naby-allah" element={<Home />} />
-          <Route path="/naby-allah/#/categorie/:folderId" element={<Category />} />
+          {/* <Route path="/naby-allah" element={<Home />} /> */}
+          <Route path="/categorie/:folderId" element={<Category />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </HashRouter>
