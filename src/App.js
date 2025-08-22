@@ -18,8 +18,9 @@ function App() {
       <HashRouter> {/* Utilisation de HashRouter au lieu de BrowserRouter */}
         <Header />
         <Routes sx={{ background: 'red' }}>
+          <Route path="/" element={<Home />} />
           <Route path="/naby-allah" element={<Home />} />
-          <Route path="/naby-allah/categorie/:folderId" element={<Category />} />
+          <Route path="/naby-allah/#/categorie/:folderId" element={<Category />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </HashRouter>
