@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { List, ListItemText, IconButton, ListItemButton, Box, Paper, CircularProgress } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import {
+    List,
+    ListItemText,
+    IconButton,
+    ListItemButton,
+    Box,
+    Paper,
+    CircularProgress
+} from '@mui/material';
 import { useParams } from 'react-router-dom';
 import BottomPlayer from './bottomPlayer';
 
@@ -9,16 +16,16 @@ const GoogleDriveFileList = () => {
     const [error, setError] = useState(null);
     const [audio, setAudio] = useState(null);
     const [playingId, setPlayingId] = useState(null);
-    const [loadingAudioId, setLoadingAudioId] = useState(null); // 🔄 Id du fichier en cours de chargement
-    const apiKey = 'AIzaSyA-JKB6f93YcyDFgz0KRuOuX9hWSHeFb5I';
+    const [loadingAudioId, setLoadingAudioId] = useState(null);
 
+    const apiKey = 'AIzaSyA-JKB6f93YcyDFgz0KRuOuX9hWSHeFb5I';
     const { folderId } = useParams();
 
     useEffect(() => {
         const fetchFiles = async () => {
             try {
                 const response = await fetch(
-                    `https://www.googleapis.com/drive/v3/files?q='${folderId}' in parents&key=${apiKey}`
+                    `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,mimeType)&key=${apiKey}`
                 );
 
                 if (!response.ok) {
@@ -26,10 +33,16 @@ const GoogleDriveFileList = () => {
                 }
 
                 const data = await response.json();
-                if (data.files) {
-                    setFiles(data.files);
+
+                // 🎯 Ne garder que les fichiers audio
+                const audioFiles = data.files.filter(file =>
+                    file.mimeType.startsWith('audio/')
+                );
+
+                if (audioFiles.length === 0) {
+                    setError('Aucun fichier audio trouvé.');
                 } else {
-                    setError('Aucun fichier trouvé.');
+                    setFiles(audioFiles);
                 }
             } catch (err) {
                 setError(err.message);
@@ -47,24 +60,23 @@ const GoogleDriveFileList = () => {
 
         const fileUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
         const newAudio = new Audio(fileUrl);
-        newAudio.preload = 'auto';  // Préchauffe l'audio pour améliorer le temps de chargement
+        newAudio.preload = 'auto';
 
-        // Ajouter un écouteur d'événement pour savoir quand l'audio est prêt
         newAudio.addEventListener('canplaythrough', () => {
-            setLoadingAudioId(null); // Audio est prêt, on cache le spinner
+            setLoadingAudioId(null);
         });
 
-        setLoadingAudioId(fileId); // L'audio est en train de se charger, on affiche le spinner
+        setLoadingAudioId(fileId);
         newAudio.play();
 
         setAudio(newAudio);
-        setPlayingId(fileId); // L'audio commence à jouer
+        setPlayingId(fileId);
     };
 
     return (
         <Paper elevation={3} sx={{ width: '100%', maxWidth: 600, padding: 1, marginX: 6, marginBottom: 20 }}>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <List sx={{}}>
+            <List>
                 {files.map((file) => (
                     <ListItemButton
                         key={file.id}
