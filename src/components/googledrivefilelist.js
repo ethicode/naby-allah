@@ -63,11 +63,16 @@ const GoogleDriveFileList = () => {
     fetchFiles();
   }, [folderId]);
 
-  const handlePlayAudio = (fileId, file) => {
+  const stopAllAudio = () => {
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
     }
+  };
+
+  const handlePlayAudio = (fileId, file) => {
+    // Arrêter tout audio avant de jouer le nouveau
+    stopAllAudio();
 
     const fileUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
     const newAudio = new Audio(fileUrl);
@@ -93,9 +98,7 @@ const GoogleDriveFileList = () => {
 
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
-    if (audio) {
-      audio.pause();
-    }
+    stopAllAudio();
   };
 
   const handleSliderChange = (event, newValue) => {
@@ -116,6 +119,19 @@ const GoogleDriveFileList = () => {
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
+
+  // Écouter l'événement de retour du téléphone (bouton retour)
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      stopAllAudio(); // Arrêter la musique lorsque le bouton retour est pressé
+    };
+
+    window.addEventListener('popstate', handleBackButton);
+
+    return () => {
+      window.removeEventListener('popstate', handleBackButton);
+    };
+  }, [audio]);
 
   return (
     <Paper elevation={3} sx={{ width: '100%', maxWidth: 600, padding: 2, marginX: 'auto', marginBottom: 20, borderRadius: 2, boxShadow: 3 }}>
@@ -174,119 +190,117 @@ const GoogleDriveFileList = () => {
       <BottomPlayer audio={audio} setAudio={setAudio} />
 
       <Drawer
-  anchor="right"
-  open={drawerOpen}
-  onClose={handleCloseDrawer}
-  sx={{
-    width: '100%',
-    flexShrink: 0,
-    '& .MuiDrawer-paper': {
-      width: '100%',
-      boxSizing: 'border-box',
-      padding: 2,
-      backgroundColor: '#121212',
-      color: 'white',
-      height: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between', // Change ici pour ajuster la disposition
-    },
-  }}
->
-  {selectedFile && (
-    <Box sx={{ flex: 1 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-        <IconButton onClick={handleCloseDrawer} sx={{ color: 'teal' }}>
-          <ArrowBack />
-        </IconButton>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-        {imageFile ? (
-          <Box
-            component="img"
-            src={`https://www.googleapis.com/drive/v3/files/${imageFile.id}?alt=media&key=${apiKey}`}
-            alt={imageFile.name}
-            sx={{
-              width: 80,
-              height: 80,
-              marginRight: 2,
-              borderRadius: 2,
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <Avatar sx={{ width: 80, height: 80, backgroundColor: 'teal', marginRight: 2 }}>
-            <PlayArrow sx={{ fontSize: '3rem', color: 'white' }} />
-          </Avatar>
-        )}
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: 'teal' }}>
-            {selectedFile.name}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'gray' }}>
-            {selectedFile.mimeType.split('/')[0]}
-          </Typography>
-        </Box>
-      </Box>
-      <Slider
-        value={audioProgress}
-        onChange={handleSliderChange}
+        anchor="right"
+        open={drawerOpen}
+        onClose={handleCloseDrawer}
         sx={{
-          color: 'teal',
-          height: 6,
-          '& .MuiSlider-rail': {
-            backgroundColor: '#555',
-          },
-          '& .MuiSlider-track': {
-            backgroundColor: 'teal',
-          },
-          '& .MuiSlider-thumb': {
-            backgroundColor: 'teal',
+          width: '100%',
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: 2,
+            backgroundColor: '#121212',
+            color: 'white',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           },
         }}
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="body2" sx={{ color: 'gray' }}>
-          {formatTime(audio ? audio.currentTime : 0)} / {formatTime(audio ? audio.duration : 0)}
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton sx={{ color: 'teal' }}>
-            <SkipPrevious />
-          </IconButton>
-          <IconButton onClick={() => audio.paused ? audio.play() : audio.pause()} sx={{ color: 'teal' }}>
-            {audio?.paused ? <PlayArrow /> : <Pause />}
-          </IconButton>
-          <IconButton sx={{ color: 'teal' }}>
-            <SkipNext />
-          </IconButton>
+      >
+        {selectedFile && (
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+              <IconButton onClick={handleCloseDrawer} sx={{ color: 'teal' }}>
+                <ArrowBack />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+              {imageFile ? (
+                <Box
+                  component="img"
+                  src={`https://www.googleapis.com/drive/v3/files/${imageFile.id}?alt=media&key=${apiKey}`}
+                  alt={imageFile.name}
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    marginRight: 2,
+                    borderRadius: 2,
+                    objectFit: 'cover',
+                  }}
+                />
+              ) : (
+                <Avatar sx={{ width: 80, height: 80, backgroundColor: 'teal', marginRight: 2 }}>
+                  <PlayArrow sx={{ fontSize: '3rem', color: 'white' }} />
+                </Avatar>
+              )}
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: 'teal' }}>
+                  {selectedFile.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'gray' }}>
+                  {selectedFile.mimeType.split('/')[0]}
+                </Typography>
+              </Box>
+            </Box>
+            <Slider
+              value={audioProgress}
+              onChange={handleSliderChange}
+              sx={{
+                color: 'teal',
+                height: 6,
+                '& .MuiSlider-rail': {
+                  backgroundColor: '#555',
+                },
+                '& .MuiSlider-track': {
+                  backgroundColor: 'teal',
+                },
+                '& .MuiSlider-thumb': {
+                  backgroundColor: 'teal',
+                },
+              }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="body2" sx={{ color: 'gray' }}>
+                {formatTime(audio ? audio.currentTime : 0)} / {formatTime(audio ? audio.duration : 0)}
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton sx={{ color: 'teal' }}>
+                  <SkipPrevious />
+                </IconButton>
+                <IconButton onClick={() => audio.paused ? audio.play() : audio.pause()} sx={{ color: 'teal' }}>
+                  {audio?.paused ? <PlayArrow /> : <Pause />}
+                </IconButton>
+                <IconButton sx={{ color: 'teal' }}>
+                  <SkipNext />
+                </IconButton>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 'auto' }}>
+          <VolumeUp sx={{ color: 'teal', marginRight: 2 }} />
+          <Slider
+            value={volume * 100}
+            onChange={handleVolumeChange}
+            sx={{
+              color: 'teal',
+              height: 6,
+              '& .MuiSlider-rail': {
+                backgroundColor: '#555',
+              },
+              '& .MuiSlider-track': {
+                backgroundColor: 'teal',
+              },
+              '& .MuiSlider-thumb': {
+                backgroundColor: 'teal',
+              },
+            }}
+          />
         </Box>
-      </Box>
-    </Box>
-  )}
-
-  {/* Déplacement du volume à la fin */}
-  <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 'auto' }}> {/* Modification ici */}
-    <VolumeUp sx={{ color: 'teal', marginRight: 2 }} />
-    <Slider
-      value={volume * 100}
-      onChange={handleVolumeChange}
-      sx={{
-        color: 'teal',
-        height: 6,
-        '& .MuiSlider-rail': {
-          backgroundColor: '#555',
-        },
-        '& .MuiSlider-track': {
-          backgroundColor: 'teal',
-        },
-        '& .MuiSlider-thumb': {
-          backgroundColor: 'teal',
-        },
-      }}
-    />
-  </Box>
-</Drawer>
-
+      </Drawer>
     </Paper>
   );
 };
