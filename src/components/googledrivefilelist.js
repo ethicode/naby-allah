@@ -22,35 +22,39 @@ const GoogleDriveFileList = () => {
     const { folderId } = useParams();
 
     useEffect(() => {
-        const fetchFiles = async () => {
-            try {
-                const response = await fetch(
-                    `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,mimeType)&key=${apiKey}`
-                );
+    const fetchFiles = async () => {
+        try {
+            const response = await fetch(
+                `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,mimeType)&key=${apiKey}`
+            );
 
-                if (!response.ok) {
-                    throw new Error('Problème de récupération des fichiers.');
-                }
-
-                const data = await response.json();
-
-                // 🎯 Ne garder que les fichiers audio
-                const audioFiles = data.files.filter(file =>
-                    file.mimeType.startsWith('audio/')
-                );
-
-                if (audioFiles.length === 0) {
-                    setError('Aucun fichier audio trouvé.');
-                } else {
-                    setFiles(audioFiles);
-                }
-            } catch (err) {
-                setError(err.message);
+            if (!response.ok) {
+                throw new Error('Problème de récupération des fichiers.');
             }
-        };
 
-        fetchFiles();
-    }, [folderId]);
+            const data = await response.json();
+
+            // 🎯 Ne garder que les fichiers audio
+            const audioFiles = data.files.filter(file =>
+                file.mimeType.startsWith('audio/')
+            );
+
+            // Trier les fichiers par nom
+            const sortedFiles = audioFiles.sort((a, b) => a.name.localeCompare(b.name));
+
+            if (sortedFiles.length === 0) {
+                setError('Aucun fichier audio trouvé.');
+            } else {
+                setFiles(sortedFiles);
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    fetchFiles();
+}, [folderId]);
+
 
     const handlePlayAudio = (fileId) => {
         if (audio) {
