@@ -11,13 +11,7 @@ import { FolderOpen } from '@mui/icons-material';
 export default function MediaCard({ name, id }) {
     return (
         <Link to={`/categorie/${id}`} state={{ folderName: name }} style={{ textDecoration: 'none' }}>
-            <Card sx={{ maxWidth: 345, height: '100%',  }}>
-                {/* <CardMedia
-                    sx={{ height: 140 }}
-                    image="/static/images/cards/contemplative-reptile.jpg"
-                    title="green iguana"
-                /> */}
-                <FolderOpen sx={{width:'100%', color: 'primary.main'}} />
+            <Card sx={{ maxWidth: 345, height: '100%', textAlign: 'center',color: 'white' }}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {name}
